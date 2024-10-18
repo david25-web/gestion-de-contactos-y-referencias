@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Registro de Referencias Familiares</title>
+    <link rel="stylesheet" href="referencias.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .formulario, .descripcion {
+            width: 48%;
+        }
+        label, input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+    </style>
+    <script>
+        function cargarReferencias() {
+            let referencias = JSON.parse(localStorage.getItem("referencias")) || [];
+            let listaReferencias = document.getElementById("listaReferencias");
+            listaReferencias.innerHTML = ""; // Limpiar lista para recargar
+
+            referencias.forEach(function(referencia) {
+                let nuevaReferencia = document.createElement("li");
+                nuevaReferencia.innerHTML = `<strong>Contacto:</strong> ${referencia.nombreContacto} <br> <strong>Papá:</strong> ${referencia.nombrePapa} <br> <strong>Mamá:</strong> ${referencia.nombreMama} <br> <strong>Casa:</strong> ${referencia.direccionCasa}`;
+                listaReferencias.appendChild(nuevaReferencia);
+            });
+        }
+
+        function agregarReferencia(event) {
+            event.preventDefault(); // Prevenir el envío del formulario
+
+            let nombrePapa = document.getElementById("nombrePapa").value;
+            let nombreMama = document.getElementById("nombreMama").value;
+            let direccionCasa = document.getElementById("direccionCasa").value;
+
+            let historial = JSON.parse(localStorage.getItem("historial")) || [];
+            let nombreContacto = historial.length > 0 ? historial[historial.length - 1].nombre : "Desconocido";
+
+            let referencia = {
+                nombreContacto: nombreContacto,
+                nombrePapa: nombrePapa,
+                nombreMama: nombreMama,
+                direccionCasa: direccionCasa
+            };
+
+            let referencias = JSON.parse(localStorage.getItem("referencias")) || [];
+            referencias.push(referencia);
+            localStorage.setItem("referencias", JSON.stringify(referencias));
+
+            cargarReferencias();
+            enviarADocumentacion(referencia);
+
+            document.getElementById("formularioReferencias").reset();
+            window.location.href = "documentación.html";
+        }
+
+        function enviarADocumentacion(referencia) {
+            let historialDocumentacion = JSON.parse(localStorage.getItem("documentacion")) || [];
+            historialDocumentacion.push(referencia);
+            localStorage.setItem("documentacion", JSON.stringify(historialDocumentacion));
+        }
+
+        function borrarFormulario() {
+            document.getElementById("formularioReferencias").reset();
+        }
+
+        function borrarLista() {
+            if (confirm("¿Estás seguro de que deseas borrar todas las referencias?")) {
+                localStorage.removeItem("referencias");
+                cargarReferencias();
+            }
+        }
+
+        window.onload = function() {
+            cargarReferencias();
+        };
+    </script>
+</head>
+<body>
+
+   
+    <ul class="navbar">
+        <li><a href="index.html">Página principal</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="referencias.html">Referencias</a></li>
+        <li><a href="documentación.html">Documentación</a></li>
+    </ul>
+
+    <h1>Referencias Familiares</h1>
+
+    <div class="container">
+       
+        <div class="descripcion">
+            <p>
+                En esta página, puedes agregar referencias familiares que estén asociadas a tus contactos.
+                Solo necesitas completar la información de los padres y la dirección de su residencia.
+                Estas referencias estarán ligadas al contacto que registraste previamente y podrás verlas tanto aquí como en la sección de Documentación.
+                Mantén actualizadas tus referencias para asegurar que los datos sean precisos y relevantes.
+            </p>
+        </div>
+
+        <div class="formulario">
+            <form id="formularioReferencias" onsubmit="agregarReferencia(event)">
+                <label for="nombrePapa">Nombre del Papá:</label>
+                <input type="text" id="nombrePapa" name="nombrePapa" required>
+
+                <label for="nombreMama">Nombre de la Mamá:</label>
+                <input type="text" id="nombreMama" name="nombreMama" required>
+
+                <label for="direccionCasa">Casa donde vive (Dirección):</label>
+                <input type="text" id="direccionCasa" name="direccionCasa" required>
+
+                <button type="submit">Enviar</button>
+                <button type="button" onclick="borrarFormulario()">Borrar Formulario</button>
+                <button type="button" onclick="borrarLista()">Borrar Registro</button>
+            </form>
+        </div>
+    </div>
+
+    <h2>Lista de Referidos </h2>
+    <ul id="listaReferencias">
+    </ul>
+
+</body>
+</html>

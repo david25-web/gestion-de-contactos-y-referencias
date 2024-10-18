@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Página de Documentación</title>
+    <link rel="stylesheet" href="documentación.css">
+    <title>Documentación de Contactos</title>
+    <script>
+        // Función para cargar los datos del historial
+        function cargarHistorial() {
+            let historial = JSON.parse(localStorage.getItem("historial")) || [];
+            let documentacion = JSON.parse(localStorage.getItem("documentacion")) || [];
+
+            // Obtener el elemento donde mostraremos los datos de contactos
+            let contenedor = document.getElementById("contenedor");
+            contenedor.innerHTML = ""; // Limpiar el contenido
+
+            // Recorrer el historial de contactos y mostrar cada uno en formato organizado
+            historial.forEach(function(datos, index) {
+                let parrafo = document.createElement("div");
+                parrafo.innerHTML = `
+                    <strong>Contacto ${index + 1}:</strong> ${datos.nombre} <br>
+                    <strong>Celular:</strong> ${datos.celular} <br> <!-- Cambié "Contacto" a "Celular" -->
+                    <strong>Cédula:</strong> ${datos.cedula} <br><br>
+                `;
+                contenedor.appendChild(parrafo);
+            });
+
+            // Obtener el elemento donde mostraremos las referencias
+            let listaDocumentacion = document.getElementById("listadocumentacion");
+            listaDocumentacion.innerHTML = ""; // Limpiar el contenido
+
+            // Recorrer el historial de referencias y mostrar cada una en formato organizado
+            documentacion.forEach(function(referencia, index) {
+                let parrafo = document.createElement("div");
+                parrafo.innerHTML = `
+                    <strong>Referencia ${index + 1}:</strong> <br>
+                    <strong>Contacto:</strong> ${referencia.nombreContacto} <br>
+                    <strong>Papá:</strong> ${referencia.nombrePapa} <br>
+                    <strong>Mamá:</strong> ${referencia.nombreMama} <br>
+                    <strong>Casa:</strong> ${referencia.direccionCasa} <br><br>
+                `;
+                listaDocumentacion.appendChild(parrafo);
+            });
+        }
+
+        // Función para borrar los datos del localStorage
+        function borrarDatos() {
+            if (confirm("¿Estás seguro de que deseas borrar todos los datos?")) {
+                localStorage.removeItem("historial"); // Eliminar los datos del historial
+                localStorage.removeItem("documentacion"); // Eliminar los datos de las referencias
+                cargarHistorial(); // Recargar la página sin datos
+            }
+        }
+
+        // Cargar los datos al cargar la página
+        window.onload = function() {
+            cargarHistorial();
+        };
+    </script>
+</head>
+<body>
+
+  
+    <ul class="navbar">
+        <li><a href="index.html">Página principal</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="referencias.html">Referencias</a></li>
+        <li><a href="documentación.html">Documentación</a></li>
+    </ul>
+    <h1>Documentación de Contactos y Referencias</h1>
+<p>
+    En esta sección, podrás consultar toda la información relacionada con los contactos y referencias personales que han sido registrados.
+    Aquí verás los detalles de cada contacto, como nombre, número de celular y cédula, así como las referencias familiares asociadas.
+    Además, puedes gestionar y eliminar todos los datos almacenados si es necesario.
+    Utiliza esta página para mantener un registro ordenado y accesible de tus contactos y sus referencias.
+</p>
+
+     <h1>Registro</h1>
+
+    <div id="contenedor">
+   
+    </div>
+
+    <div id="listadocumentacion">
+
+    </div>
+    <button onclick="borrarDatos()">Borrar todos los datos</button>
+
+</body>
+</html>

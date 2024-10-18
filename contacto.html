@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Página de Contacto</title>
+    <link rel="stylesheet" href="contacto.css">
+    <script>
+        function enviarFormulario(event) {
+            event.preventDefault(); // Previene el envío tradicional del formulario
+
+            // Obtener los datos del formulario
+            let nombre = document.getElementById("nombre").value;
+            let celular = document.getElementById("celular").value; 
+            let cedula = document.getElementById("cedula").value;
+
+            // Crear un objeto con los datos
+            let datos = {
+                nombre: nombre,
+                celular: celular, 
+                cedula: cedula
+            };
+
+            // Obtener el historial anterior de envíos
+            let historial = JSON.parse(localStorage.getItem("historial")) || [];
+
+            // Añadir los nuevos datos al historial
+            historial.push(datos);
+
+            // Guardar el historial actualizado en localStorage
+            localStorage.setItem("historial", JSON.stringify(historial));
+
+            // Redirigir a la página de documentación
+            window.location.href = "documentación.html";
+        }
+    </script>
+</head>
+<body>
+
+   
+    <ul class="navbar">
+        <li><a href="index.html">Página principal</a></li>
+        <li><a href="contacto.html">Contacto</a></li>
+        <li><a href="referencias.html">Referencias</a></li>
+        <li><a href="documentación.html">Documentación</a></li>
+    </ul>
+
+    <h1> Contacto</h1>
+
+    <p>
+      Por favor, completa el formulario de contacto con tus datos personales.
+      Esta información incluirá tu nombre completo, número de celular y tu cédula de identidad.
+      Todos los contactos registrados serán guardados de manera segura y podrán ser consultados posteriormente en la sección de Documentación.
+      Asegúrate de que la información sea precisa antes de enviarla, ya que será clave para cualquier referencia futura.
+  </p>
+
+    <form onsubmit="enviarFormulario(event)">
+        <label for="nombre">Nombre completo:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="celular">Celular:</label><br> 
+        <input type="tel" id="celular" name="celular" required><br><br> 
+
+        <label for="cedula">Cédula:</label><br>
+        <input type="text" id="cedula" name="cedula" required><br><br>
+
+        <input type="submit" value="Enviar">
+        <input type="reset">
+    </form>
+
+
+
+</body>
+</html>
